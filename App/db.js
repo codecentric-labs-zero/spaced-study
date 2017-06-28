@@ -45,6 +45,32 @@ export class CardsListDAO {
         }
     }
 
+    static incrementOrRestartCardLevel(realm, card, increment) {
+
+        if (increment) {
+            realm.write(() => {
+                realm.create('CardsList',
+                    {
+                        id: card.id,
+                        question: card.question,
+                        answer: card.answer,
+                        level: card.level + 1
+                    }, true)
+            })
+        } else {
+
+            realm.write(() => {
+                realm.create('CardsList',
+                    {
+                        id: card.id,
+                        question: card.question,
+                        answer: card.answer,
+                        level: 1
+                    }, true)
+            })
+        }
+    }
+
     static removeCard(realm, cardId) {
         let card = realm.objects('CardsList').filtered('id =' + '\"' + cardId + '\"')
         realm.write(() => {
@@ -52,10 +78,18 @@ export class CardsListDAO {
         })
     }
 
-    static getAllCars(realm) {
-        let cards = realm.objects('CardsList');
-        return cards.sorted('level')
+    static getCardsForStudy(realm) {
+        let cards = realm.objects('CardsList').filtered('level < 7');
+        // return cards
+        return cards.sorted('level', false)
     }
+
+    static getAllCardsForSetup(realm) {
+        let cards = realm.objects('CardsList')
+        // return cards
+        return cards.sorted('level', false)
+    }
+
 }
 
 

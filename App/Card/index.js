@@ -25,22 +25,32 @@ export default class Card extends Component {
 
         if (this.state.showAnswer) {
             cardBottom =
-                <View>
-                    <Text>{this.props.answer}</Text>
-
-                    <Button
-                        onPress={() => {
-                            this.handleShow()
-                        }}
-                        title="I was correct"
-                    />
-
-                    <Button
-                        onPress={() => {
-                            this.handleShow()
-                        }}
-                        title="I did not know the answer"
-                    />
+                <View style={{flex: 1, margin: 15}}>
+                    <View style={{flex: 1, alignSelf: 'center', justifyContent: 'center',}}>
+                        <Text>{this.props.card.answer}</Text>
+                    </View>
+                    <View style={{flex: 1}}>
+                        <View style={{marginVertical: 5}}>
+                            <Button
+                                onPress={() => {
+                                    this.handleShow();
+                                    this.props.onCorrectAnswer(this.props.card);
+                                }}
+                                title="I was correct"
+                                color='green'
+                            />
+                        </View>
+                        <View style={{marginVertical: 5}}>
+                            <Button
+                                onPress={() => {
+                                    this.handleShow();
+                                    this.props.onIncorrectAnswer(this.props.card);
+                                }}
+                                title="I was wrong"
+                                color='red'
+                            />
+                        </View>
+                    </View>
                 </View>
 
         } else {
@@ -53,11 +63,15 @@ export default class Card extends Component {
         }
 
         return (
-            <View>
-                <Text>
-                    {this.props.question}
-                </Text>
-                {cardBottom}
+            <View style={{flex: 1, margin: 15}}>
+                <View style={{flex: 1, alignSelf: 'center', justifyContent: 'center',}}>
+                    <Text>
+                        {this.props.card.question}
+                    </Text>
+                </View>
+                <View style={{flex: 1}}>
+                    {cardBottom}
+                </View>
             </View>
         )
     }

@@ -23,7 +23,11 @@ export default class StudyScreen extends Component {
 
         this.state = {
             cards: '',
+            currentCardCounter: 0,
         }
+
+        this._onCorrectAnswer = this._onCorrectAnswer.bind(this);
+        this._onIncorrectAnswer = this._onIncorrectAnswer.bind(this);
     }
 
     static navigationOptions = {
@@ -31,13 +35,8 @@ export default class StudyScreen extends Component {
     };
 
     componentDidMount() {
-
-        realm.addListener('change', () => {
-            this.setState({cards: CardsListDAO.getAllCars(realm)})
-        });
-
         this.setState({
-            cards: CardsListDAO.getAllCars(realm)
+            cards: CardsListDAO.getCardsForStudy(realm)
         })
     }
 
@@ -45,29 +44,48 @@ export default class StudyScreen extends Component {
         realm.removeAllListeners();
     }
 
+    incrementCurrentCardCounter() {
+
+        if (this.state.currentCardCounter <= this.state.cards.length - 1) {
+            this.setState({
+                currentCardCounter: this.state.currentCardCounter + 1,
+            })
+        } else {
+            this.setState({
+                currentCardCounter: 0,
+                cards: ''
+            })
+        }
+    }
+
+    _onCorrectAnswer(card) {
+        this.incrementCurrentCardCounter();
+        CardsListDAO.incrementOrRestartCardLevel(realm, card, true)
+    }
+
+    _onIncorrectAnswer(card) {
+        this.incrementCurrentCardCounter();
+        CardsListDAO.incrementOrRestartCardLevel(realm, card, false)
+    }
+
 
     render() {
 
-        let cards
-        if (this.state.cards.length > 0) {
-            cards = _.map(this.state.cards, (card, i) => {
-                return (
-                    <Card key={i} question={card.question} answer={card.answer}>
-                    </Card>
-
-                )
-            })
+        let card = this.state.cards[this.state.currentCardCounter];
+        if (this.state.cards.length > 0 && this.state.currentCardCounter <= this.state.cards.length - 1) {
+            currentCard =
+                <Card card={card}
+                      onCorrectAnswer={this._onCorrectAnswer}
+                      onIncorrectAnswer={this._onIncorrectAnswer}></Card>
         } else {
-            cards = <Text>No cards</Text>
+            currentCard = <Text>No cards</Text>
         }
         return (
             <View style={styles.mainContainer}>
                 <Ribbon/>
 
                 <View style={styles.cardsContainer}>
-                    <ScrollView>
-                        {cards}
-                    </ScrollView>
+                    {currentCard}
                 </View>
 
             </View>
@@ -86,6 +104,8 @@ const styles = StyleSheet.create({
         flex: 5,
         backgroundColor: 'skyblue',
         alignSelf: 'stretch',
-        alignItems: 'stretch'
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexDirection: 'row',
     },
 });

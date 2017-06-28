@@ -40,11 +40,11 @@ export default class SetupScreen extends Component {
     componentDidMount() {
 
         realm.addListener('change', () => {
-            this.setState({cards: CardsListDAO.getAllCars(realm)})
+            this.setState({cards: CardsListDAO.getAllCardsForSetup(realm)})
         });
 
         this.setState({
-            cards: CardsListDAO.getAllCars(realm)
+            cards: CardsListDAO.getAllCardsForSetup(realm)
         })
     }
 
@@ -68,7 +68,7 @@ export default class SetupScreen extends Component {
         if (this.state.cards.length > 0) {
             cards = _.map(this.state.cards, (card, i) => {
                 return (
-                    <CardSetup key={i} id={card.id} question={card.question} answer={card.answer}>
+                    <CardSetup key={i} card={card}>
                     </CardSetup>
 
                 )
