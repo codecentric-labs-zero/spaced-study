@@ -7,7 +7,8 @@ import {
     TextInput,
     KeyboardAvoidingView,
     Button,
-    ScrollView
+    ScrollView,
+    ToastAndroid
 } from 'react-native';
 
 
@@ -33,7 +34,7 @@ export default class SetupScreen extends Component {
     }
 
     static navigationOptions = {
-        header: true
+        header: false
     };
 
     componentDidMount() {
@@ -58,7 +59,7 @@ export default class SetupScreen extends Component {
             CardsListDAO.addOrUpdateCard(realm, card)
 
         } else {
-            console.warn("Nothing to add!")
+            ToastAndroid.show('Insert question and answer!', ToastAndroid.SHORT);
         }
     }
 
