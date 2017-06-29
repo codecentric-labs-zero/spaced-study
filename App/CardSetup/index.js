@@ -23,6 +23,12 @@ export default class CardSetup extends Component {
         CardsListDAO.removeCard(realm, id)
     }
 
+    onResetCard(card) {
+        if (card.level > 1) {
+            CardsListDAO.incrementOrRestartCardLevel(realm, card, false)
+        }
+    }
+
     render() {
 
 
@@ -49,10 +55,15 @@ export default class CardSetup extends Component {
                 {level}
                 <View style={{flexDirection: 'column'}}>
 
-                    <Icon name="delete" size={30} color="#900"
+                    <Icon name="delete" size={30} color="#244135"
                           onPress={() => {
                               this.onRemove(this.props.card.id)
                           }}/>
+                    <Icon name="autorenew" size={30} color="#E1ECDE"
+                          onPress={() => {
+                              this.onResetCard(this.props.card)
+                          }}/>
+
                 </View>
             </View>
         )

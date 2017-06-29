@@ -10,6 +10,7 @@ import {
     ScrollView,
     ToastAndroid
 } from 'react-native';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
 
 import _ from 'lodash';
@@ -57,6 +58,10 @@ export default class SetupScreen extends Component {
         if (this.state.question.length > 0 && this.state.answer.length > 0) {
             let card = {question: this.state.question, answer: this.state.answer}
             CardsListDAO.addOrUpdateCard(realm, card)
+            this.setState({
+                question: '',
+                answer: '',
+            })
 
         } else {
             ToastAndroid.show('Insert question and answer!', ToastAndroid.SHORT);
@@ -79,6 +84,23 @@ export default class SetupScreen extends Component {
         return (
             <View style={styles.mainContainer}>
 
+                <View style={{
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    backgroundColor: 'skyblue',
+                    alignSelf: 'stretch',
+                    padding: 5,
+                }}>
+                    <View style={{flexDirection: 'row'}}>
+                        <Icon name="delete" size={15} color="#244135"/>
+                        <Text> - Remove question</Text>
+                    </View>
+                    <View style={{flexDirection: 'row'}}>
+                        <Icon name="autorenew" size={15} color="#244135"/>
+                        <Text> - Reset question level</Text>
+                    </View>
+                </View>
+
                 <View style={styles.cardsContainer}>
                     <ScrollView>
                         {cards}
@@ -98,14 +120,14 @@ export default class SetupScreen extends Component {
                         <Text>Question:</Text>
                         <TextInput
                             style={{padding: 5}}
-                            onChangeText={(question) => this.setState({question})
-                            }
+                            onChangeText={(question) => this.setState({question})}
+                            value={this.state.question}
                         />
                         <Text>Answer:</Text>
                         <TextInput
                             style={{padding: 5}}
-                            onChangeText={(answer) => this.setState({answer})
-                            }
+                            onChangeText={(answer) => this.setState({answer})}
+                            value={this.state.answer}
                         />
                     </View>
                 </KeyboardAvoidingView>
@@ -121,13 +143,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     cardsContainer: {
-        flex: 5,
+        flex: 10,
         backgroundColor: 'skyblue',
         alignSelf: 'stretch',
         alignItems: 'stretch'
     },
     addContainer: {
-        flex: 2,
+        flex: 4,
         alignSelf: 'stretch',
         alignItems: 'stretch'
     },
