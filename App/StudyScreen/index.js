@@ -12,8 +12,6 @@ import Realm from '../db';
 import {CardsListDAO} from '../db';
 let realm = Realm;
 
-import _ from 'lodash';
-
 import Ribbon from '../Ribbon'
 import Card from '../Card'
 
@@ -23,7 +21,6 @@ export default class StudyScreen extends Component {
 
         this.state = {
             cards: '',
-            currentCardCounter: 0,
         }
 
         this._onCorrectAnswer = this._onCorrectAnswer.bind(this);
@@ -40,39 +37,29 @@ export default class StudyScreen extends Component {
         })
     }
 
-    componentWillUnmount() {
-        realm.removeAllListeners();
-    }
-
-    incrementCurrentCardCounter() {
-
-        if (this.state.currentCardCounter <= this.state.cards.length - 1) {
-            this.setState({
-                currentCardCounter: this.state.currentCardCounter + 1,
-            })
-        } else {
-            this.setState({
-                currentCardCounter: 0,
-                cards: ''
-            })
-        }
+    goToNextCard() {
+        let cards = this.state.cards.slice()
+        cards.splice(0, 1)
+        this.setState({
+            cards: cards
+        })
     }
 
     _onCorrectAnswer(card) {
-        this.incrementCurrentCardCounter();
+        this.goToNextCard();
         CardsListDAO.incrementOrRestartCardLevel(realm, card, true)
     }
 
     _onIncorrectAnswer(card) {
-        this.incrementCurrentCardCounter();
+        this.goToNextCard();
         CardsListDAO.incrementOrRestartCardLevel(realm, card, false)
     }
 
 
     render() {
 
-        let card = this.state.cards[this.state.currentCardCounter];
-        if (this.state.cards.length > 0 && this.state.currentCardCounter <= this.state.cards.length - 1) {
+        if (this.state.cards.length > 0) {
+            let card = this.state.cards[0];
             currentCard =
                 <Card card={card}
                       onCorrectAnswer={this._onCorrectAnswer}

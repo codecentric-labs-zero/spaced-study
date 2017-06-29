@@ -2,7 +2,8 @@ import React, {Component} from 'react';
 import {
     Text,
     View,
-    Button
+    Button,
+    ScrollView
 } from 'react-native';
 
 export default class Card extends Component {
@@ -25,9 +26,11 @@ export default class Card extends Component {
 
         if (this.state.showAnswer) {
             cardBottom =
-                <View style={{flex: 1, margin: 15}}>
-                    <View style={{flex: 1, alignSelf: 'center', justifyContent: 'center',}}>
-                        <Text>{this.props.card.answer}</Text>
+                <View style={{flex: 1}}>
+                    <View style={{flex: 2, alignSelf: 'center', justifyContent: 'center'}}>
+                        <ScrollView>
+                            <Text>{this.props.card.answer}</Text>
+                        </ScrollView>
                     </View>
                     <View style={{flex: 1}}>
                         <View style={{marginVertical: 5}}>
@@ -62,14 +65,37 @@ export default class Card extends Component {
             />
         }
 
+        let backgroundColorForAnswer = this.state.showAnswer ? '#DADAD9' : 'skyblue';
+        let borderWidthForAnswers = this.state.showAnswer ? 1 : 0;
+        let borderRadiusWidthForAnswers = this.state.showAnswer ? 4 : 0;
+
         return (
-            <View style={{flex: 1, margin: 15}}>
-                <View style={{flex: 1, alignSelf: 'center', justifyContent: 'center',}}>
-                    <Text>
-                        {this.props.card.question}
-                    </Text>
+            <View style={{flex: 1, margin: 10}}>
+
+                <View style={{
+                    flex: 1,
+                    alignSelf: 'center',
+                    justifyContent: 'center',
+                    padding: 10,
+                    backgroundColor: '#EDE6E3',
+                    borderWidth: 1,
+                    borderRadius: 4
+                }}>
+                    <ScrollView>
+                        <Text>
+                            {this.props.card.question}
+                        </Text>
+                    </ScrollView>
                 </View>
-                <View style={{flex: 1}}>
+
+                <View style={{
+                    flex: 1,
+                    padding: 10,
+                    marginTop: 5,
+                    backgroundColor: backgroundColorForAnswer,
+                    borderWidth: borderWidthForAnswers,
+                    borderRadius: borderRadiusWidthForAnswers
+                }}>
                     {cardBottom}
                 </View>
             </View>

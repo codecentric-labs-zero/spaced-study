@@ -74,7 +74,7 @@ export default class SetupScreen extends Component {
                 )
             })
         } else {
-            cards = <Text>No cards</Text>
+            cards = <Text style={{alignSelf: 'center'}}>No cards</Text>
         }
         return (
             <View style={styles.mainContainer}>
